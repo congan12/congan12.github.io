@@ -48,12 +48,10 @@
   <link rel="dns-prefetch" href="http://example.com">
   <title>小王的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="爱好网络安全和渗透测试">
-<meta property="og:type" content="website">
+  <meta property="og:type" content="website">
 <meta property="og:title" content="小王的博客">
 <meta property="og:url" content="http://example.com/index.html">
 <meta property="og:site_name" content="小王的博客">
-<meta property="og:description" content="爱好网络安全和渗透测试">
 <meta property="og:locale" content="en_US">
 <meta property="article:author" content="小王">
 <meta name="twitter:card" content="summary">
@@ -195,6 +193,98 @@
           </div>
           <div id="js-content" class="content-ll">
             
+  
+    <article id="post-搭建个人博客" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2021/01/22/%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/">搭建个人博客</a>
+    </h1>
+  
+
+        
+        <a href="/2021/01/22/%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/" class="archive-article-date">
+  	<time datetime="2021-01-22T01:32:11.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-01-22</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="准备工作"><a href="#准备工作" class="headerlink" title="准备工作"></a>准备工作</h2><p>1.先去github注册个账户<br>2.安装了node.js<br>3.安装了git bash</p>
+<h2 id="开始搭建博客"><a href="#开始搭建博客" class="headerlink" title="开始搭建博客"></a>开始搭建博客</h2><h3 id="创建仓库"><a href="#创建仓库" class="headerlink" title="创建仓库"></a>创建仓库</h3><p>新建一个仓库，命名为<strong>你的用户名.github.io的仓库</strong><br><a target="_blank" rel="noopener" href="http://qnbcqpn74.hn-bkt.clouddn.com/1.jpg" title="示列图片">示列图片</a></p>
+<h3 id="配置SSH-KEY"><a href="#配置SSH-KEY" class="headerlink" title="配置SSH KEY"></a>配置SSH KEY</h3><p>用git bash执行如下命令</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">cd</span> ~/. ssh <span class="comment">#检查本机已存在的ssh密钥</span></span><br></pre></td></tr></table></figure>
+<p>如果提示：No such file or directory 说明你是第一次使用git。<br>所以我们需要用如下命令来生成SSH KEY</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh-keygen -t rsa -C <span class="string">&quot;你的邮件地址&quot;</span></span><br></pre></td></tr></table></figure>
+<p>然后连续3次回车，最终会生成一个文件在用户目录下，打开用户目录，找到.ssh\id_rsa.pub文件，记事本打开并复制里面的内容，打开你的github主页，进入个人设置 -&gt; SSH and GPG keys -&gt; New SSH key：<br><a target="_blank" rel="noopener" href="http://qnbcqpn74.hn-bkt.clouddn.com/2.png" title="示列图片">示列图片</a></p>
+<p><a target="_blank" rel="noopener" href="http://qnbcqpn74.hn-bkt.clouddn.com/3.png" title="示列图片">示列图片</a></p>
+<h3 id="测试SSH是否成功"><a href="#测试SSH是否成功" class="headerlink" title="测试SSH是否成功"></a>测试SSH是否成功</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$  ssh -T git@github.com</span><br></pre></td></tr></table></figure>
+<p>如果提示Are you sure you want to continue connecting (yes/no)?，输入yes就可配置成功</p>
+<p>然后配置</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ git config --global user.name <span class="string">&quot;liuxianan&quot;</span>// 你的github用户名，非昵称</span><br><span class="line">$ git config --global user.email  <span class="string">&quot;xxx@qq.com&quot;</span>// 填写你的github注册邮箱</span><br></pre></td></tr></table></figure>
+<h2 id="安装hexo"><a href="#安装hexo" class="headerlink" title="安装hexo"></a>安装hexo</h2><p>利用git bash安装</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ npm install -g hexo</span><br></pre></td></tr></table></figure>
+<h2 id="初始化hexo"><a href="#初始化hexo" class="headerlink" title="初始化hexo"></a>初始化hexo</h2><p>在电脑的某个地方新建一个名为hexo的文件夹（名字可以随便取），比如我的是D:\bk\hexo，由于这个文件夹将来就作为你存放代码的地方</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">cd</span> /d/bk/hexo/</span><br><span class="line">$ hexo init</span><br></pre></td></tr></table></figure>
+<p>hexo会自动下载一些文件到这个目录，目录结构如下图：<br><a target="_blank" rel="noopener" href="http://qnbcqpn74.hn-bkt.clouddn.com/4.png" title="示列图片">示列图片</a></p>
+<h2 id="配置hexo"><a href="#配置hexo" class="headerlink" title="配置hexo"></a>配置hexo</h2><p>下载之后配置下_config.yml文件<br><a target="_blank" rel="noopener" href="http://qnbcqpn74.hn-bkt.clouddn.com/5.png" title="示列图片">示列图片</a><br>然后下载你喜欢的模板进行替换，模板在hexo官网自己挑选下载到themes里面。修改根目录下的_config.yml找到themes进行模板替换</p>
+<p>替换完之后利用如下命令预览一下效果。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ hexo clean</span><br><span class="line">$ hexo g</span><br><span class="line">$ hexo s</span><br></pre></td></tr></table></figure>
+<p>此时会开启本机的4000端口<br><a target="_blank" rel="noopener" href="http://qnbcqpn74.hn-bkt.clouddn.com/6.png" title="示列图片">示列图片</a></p>
+<h2 id="上传hexo到github"><a href="#上传hexo到github" class="headerlink" title="上传hexo到github"></a>上传hexo到github</h2><p>上传hexo前先配置hexo根目录下的_config.yml中有关deploy的部分：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">deploy:</span><br><span class="line">  <span class="built_in">type</span>: git</span><br><span class="line">  repository: git@github.com:congan12/congan12.github.io.git</span><br><span class="line">  branch: master</span><br></pre></td></tr></table></figure>
+<p>完成以上操作后，我们把hexo用如下命令上传到github</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo d</span><br></pre></td></tr></table></figure>
+<p>但是此时直接执行hexo d的话一般会报如下错误：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Deployer not found: github 或者 Deployer not found: git</span><br></pre></td></tr></table></figure>
+<p>百度了一下发现是缺少一个插件，所以我们先用以下命令来安装插件：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install hexo-deployer-git --save</span><br></pre></td></tr></table></figure>
+<p>安装完成后，再次利用hexo d命令就可以上传成功<br>上传成功后就可以拥有自己的个人博客了<br><a target="_blank" rel="noopener" href="http://qnbcqpn74.hn-bkt.clouddn.com/7.png" title="示列图片">示列图片</a></p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2021/01/22/%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
   
     <article id="post-hello-world" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
