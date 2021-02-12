@@ -194,6 +194,75 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-qcms-XSS-SQL-任意文件上传漏洞复现" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2021/01/31/qcms-XSS-SQL-%E4%BB%BB%E6%84%8F%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/">qcms XSS+SQL+任意文件上传漏洞复现</a>
+    </h1>
+  
+
+        
+        <a href="/2021/01/31/qcms-XSS-SQL-%E4%BB%BB%E6%84%8F%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/" class="archive-article-date">
+  	<time datetime="2021-01-31T08:37:43.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-01-31</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="qcms介绍"><a href="#qcms介绍" class="headerlink" title="qcms介绍"></a>qcms介绍</h2><p>QCMS 网站管理系统 是通过MVC架构开发的一套PHP轻量级系统,它免费,开源,小巧,易用,功能强大. 可以自定义模块, 容易二开发</p>
+<h2 id="xss复现"><a href="#xss复现" class="headerlink" title="xss复现"></a>xss复现</h2><p>xss储存型漏洞处于留言板页面，我们先来看看这部分源码<br><img src="http://qnbcqpn74.hn-bkt.clouddn.com/qcms1.png" alt="Alt text"><br>没有对输入进行任何过滤，追踪到QCMS_Guest类的select和insert方法<br><img src="http://qnbcqpn74.hn-bkt.clouddn.com/qcms2.png" alt="Alt text"><br>继续追踪Db_pdo类的exec_select和exec_insert方法<br><img src="http://qnbcqpn74.hn-bkt.clouddn.com/qcms3.png" alt="Alt text"><br>这里没有对查询和插入数据库进行过虑，继续追踪到get_sql_insert方法<br><img src="http://qnbcqpn74.hn-bkt.clouddn.com/qcms4.png" alt="Alt text"><br>这里利用get_magic_quotes_gpc()函数进行了单双引号，反斜线和空字符会自动转为含有反斜线的溢出字符。<br>利用payload打出xss<br><img src="http://qnbcqpn74.hn-bkt.clouddn.com/qcms7.png" alt="Alt text"><br><img src="http://qnbcqpn74.hn-bkt.clouddn.com/qcms8.png" alt="Alt text"></p>
+<h2 id="sql盲注复现"><a href="#sql盲注复现" class="headerlink" title="sql盲注复现"></a>sql盲注复现</h2><p>漏洞处于后台下载管理处<br>先上漏洞源码<br><img src="http://qnbcqpn74.hn-bkt.clouddn.com/qcms9.png" alt="Alt text"><br>这里没有进行过滤，直接把接收到的参数拼接进语句里<br>追踪到selectAll()<br><img src="http://qnbcqpn74.hn-bkt.clouddn.com/qcms11.png" alt="Alt text"><br>发现注入点，继续追踪到exec_select方法<br><img src="http://qnbcqpn74.hn-bkt.clouddn.com/qcms12.png" alt="Alt text"><br>可以看到数据拼接前还经过get_sql_cond方法，继续追踪过去<br><img src="http://qnbcqpn74.hn-bkt.clouddn.com/qcms13.png" alt="Alt text"><br>这里经过了get_magic_quotes_gpc()函数过滤，但是当我们传入的数据不为数组时，函数直接返回原始数据，并没有进行过滤，从而导致了注入<br>分析过后直接上payload</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">payload:?title=1<span class="string">&#x27;;select if(ascii(substr((select database()), 1, 1))-113, 1, sleep(5));%23</span></span><br><span class="line"><span class="string"></span></span><br></pre></td></tr></table></figure>
+<h2 id="文件上传复现"><a href="#文件上传复现" class="headerlink" title="文件上传复现"></a>文件上传复现</h2><p>漏洞在后台管理相册列表处<br>先上源码<br><img src="http://qnbcqpn74.hn-bkt.clouddn.com/qcms14.png" alt="Alt text"><br>这里并没有进行过滤，追踪到upload()方法<br><img src="http://qnbcqpn74.hn-bkt.clouddn.com/qcms15.png" alt="Alt text"><br>upload()方法将内容的hash储存到数据库中，如果存在相同数据，则直接将路径返回，如果不存在，才会进行上传<br>继续追踪到upload_file()方法<br><img src="http://qnbcqpn74.hn-bkt.clouddn.com/qcms16.png" alt="Alt text"><br>这里定义如果文件不是post方式上传的或者上传的文件type不在白名单内，返回-1<br>upload类定义的type白名单如下</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">private <span class="variable">$_type</span> = array(<span class="string">&#x27;image/pjpeg&#x27;</span>, <span class="string">&#x27;image/jpeg&#x27;</span>, <span class="string">&#x27;image/gif&#x27;</span>, <span class="string">&#x27;image/png&#x27;</span>, <span class="string">&#x27;image/x-png&#x27;</span>, <span class="string">&#x27;image/bmp&#x27;</span>, <span class="string">&#x27;application/x-shockwave-flash&#x27;</span>, <span class="string">&#x27;application/octet-stream&#x27;</span>, <span class="string">&#x27;image/vnd.adobe.photoshop&#x27;</span>);</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>但是我们在白名单中发现了php的type’application/octet-stream’竟然也在白名单中，也就是我们可以直接上传php文件了<br>继续追踪到_move_file()方法<br><img src="http://qnbcqpn74.hn-bkt.clouddn.com/qcms17.png" alt="Alt text"><br>这里定义上传的文件名改成随机数，并且还会返回上传的路径<br>分析后直接上传php小马，配合蚁剑拿下getshell<br><img src="http://qnbcqpn74.hn-bkt.clouddn.com/qcms18.png" alt="Alt text"><br><img src="http://qnbcqpn74.hn-bkt.clouddn.com/qcms19.png" alt="Alt text"></p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2021/01/31/qcms-XSS-SQL-%E4%BB%BB%E6%84%8F%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-搭建个人博客" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
