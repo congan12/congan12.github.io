@@ -215,7 +215,19 @@
     <div class="article-entry" itemprop="articleBody">
       
         <h2 id="qcms介绍"><a href="#qcms介绍" class="headerlink" title="qcms介绍"></a>qcms介绍</h2><p>QCMS 网站管理系统 是通过MVC架构开发的一套PHP轻量级系统,它免费,开源,小巧,易用,功能强大. 可以自定义模块, 容易二开发</p>
-<h2 id="xss复现"><a href="#xss复现" class="headerlink" title="xss复现"></a>xss复现</h2><p>xss储存型漏洞处于留言板页面，我们先来看看这部分源码<br><img src="http://qnbcqpn74.hn-bkt.clouddn.com/qcms1.png" style="margin: auto" /><br>没有对输入进行任何过滤，追踪到QCMS_Guest类的select和insert方法<br><img src="http://qnbcqpn74.hn-bkt.clouddn.com/qcms2.png" alt="Alt text"><br>继续追踪Db_pdo类的exec_select和exec_insert方法<br><img src="http://qnbcqpn74.hn-bkt.clouddn.com/qcms3.png" alt="Alt text"><br>这里没有对查询和插入数据库进行过虑，继续追踪到get_sql_insert方法<br><img src="http://qnbcqpn74.hn-bkt.clouddn.com/qcms4.png" alt="Alt text"><br>这里利用get_magic_quotes_gpc()函数进行了单双引号，反斜线和空字符会自动转为含有反斜线的溢出字符。<br>利用payload打出xss<br><img src="http://qnbcqpn74.hn-bkt.clouddn.com/qcms7.png" alt="Alt text"><br><img src="http://qnbcqpn74.hn-bkt.clouddn.com/qcms8.png" alt="Alt text"></p>
+<h2 id="xss复现"><a href="#xss复现" class="headerlink" title="xss复现"></a>xss复现</h2><p>xss储存型漏洞处于留言板页面，我们先来看看这部分源码</p>
+<div><img src="http://qnbcqpn74.hn-bkt.clouddn.com/qcms1.png" ></div>
+没有对输入进行任何过滤，追踪到QCMS_Guest类的select和insert方法
+![Alt text](http://qnbcqpn74.hn-bkt.clouddn.com/qcms2.png)
+继续追踪Db_pdo类的exec_select和exec_insert方法
+![Alt text](http://qnbcqpn74.hn-bkt.clouddn.com/qcms3.png)
+这里没有对查询和插入数据库进行过虑，继续追踪到get_sql_insert方法
+![Alt text](http://qnbcqpn74.hn-bkt.clouddn.com/qcms4.png)
+这里利用get_magic_quotes_gpc()函数进行了单双引号，反斜线和空字符会自动转为含有反斜线的溢出字符。
+利用payload打出xss
+![Alt text](http://qnbcqpn74.hn-bkt.clouddn.com/qcms7.png)
+![Alt text](http://qnbcqpn74.hn-bkt.clouddn.com/qcms8.png)
+
 <h2 id="sql盲注复现"><a href="#sql盲注复现" class="headerlink" title="sql盲注复现"></a>sql盲注复现</h2><p>漏洞处于后台下载管理处<br>先上漏洞源码<br><img src="http://qnbcqpn74.hn-bkt.clouddn.com/qcms9.png" alt="Alt text"><br>这里没有进行过滤，直接把接收到的参数拼接进语句里<br>追踪到selectAll()<br><img src="http://qnbcqpn74.hn-bkt.clouddn.com/qcms11.png" alt="Alt text"><br>发现注入点，继续追踪到exec_select方法<br><img src="http://qnbcqpn74.hn-bkt.clouddn.com/qcms12.png" alt="Alt text"><br>可以看到数据拼接前还经过get_sql_cond方法，继续追踪过去<br><img src="http://qnbcqpn74.hn-bkt.clouddn.com/qcms13.png" alt="Alt text"><br>这里经过了get_magic_quotes_gpc()函数过滤，但是当我们传入的数据不为数组时，函数直接返回原始数据，并没有进行过滤，从而导致了注入<br>分析过后直接上payload</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">payload:?title=1<span class="string">&#x27;;select if(ascii(substr((select database()), 1, 1))-113, 1, sleep(5));%23</span></span><br><span class="line"><span class="string"></span></span><br></pre></td></tr></table></figure>
 <h2 id="文件上传复现"><a href="#文件上传复现" class="headerlink" title="文件上传复现"></a>文件上传复现</h2><p>漏洞在后台管理相册列表处<br>先上源码<br><img src="http://qnbcqpn74.hn-bkt.clouddn.com/qcms14.png" alt="Alt text"><br>这里并没有进行过滤，追踪到upload()方法<br><img src="http://qnbcqpn74.hn-bkt.clouddn.com/qcms15.png" alt="Alt text"><br>upload()方法将内容的hash储存到数据库中，如果存在相同数据，则直接将路径返回，如果不存在，才会进行上传<br>继续追踪到upload_file()方法<br><img src="http://qnbcqpn74.hn-bkt.clouddn.com/qcms16.png" alt="Alt text"><br>这里定义如果文件不是post方式上传的或者上传的文件type不在白名单内，返回-1<br>upload类定义的type白名单如下</p>
