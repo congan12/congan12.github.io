@@ -51,12 +51,12 @@
   <meta name="description" content="SQL注入成因没有对用户输入的内容进行过滤，在拼凑SQL语句时将恶意代码传递进数据库。造成数据泄漏、提权服务器等安全威胁。 SQL注入类型 sqlilab-sqlmap Boolean-based blind SQL injection（布尔型注入） Error-based SQL injection（报错型注入） UNION query SQL injection（可联合查询注入） Stacke">
 <meta property="og:type" content="article">
 <meta property="og:title" content="面试常见问题">
-<meta property="og:url" content="http://example.com/2021/02/13/%E9%9D%A2%E8%AF%95%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98/index.html">
+<meta property="og:url" content="http://example.com/2021/03/15/%E9%9D%A2%E8%AF%95%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98/index.html">
 <meta property="og:site_name" content="从安的博客">
 <meta property="og:description" content="SQL注入成因没有对用户输入的内容进行过滤，在拼凑SQL语句时将恶意代码传递进数据库。造成数据泄漏、提权服务器等安全威胁。 SQL注入类型 sqlilab-sqlmap Boolean-based blind SQL injection（布尔型注入） Error-based SQL injection（报错型注入） UNION query SQL injection（可联合查询注入） Stacke">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2021-02-13T03:37:32.000Z">
-<meta property="article:modified_time" content="2021-03-15T03:36:17.899Z">
+<meta property="article:published_time" content="2021-03-15T04:20:49.000Z">
+<meta property="article:modified_time" content="2021-03-15T04:27:02.327Z">
 <meta property="article:author" content="从安">
 <meta name="twitter:card" content="summary">
   
@@ -213,8 +213,8 @@
   
 
         
-        <a href="/2021/02/13/%E9%9D%A2%E8%AF%95%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98/" class="archive-article-date">
-  	<time datetime="2021-02-13T03:37:32.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-02-13</time>
+        <a href="/2021/03/15/%E9%9D%A2%E8%AF%95%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98/" class="archive-article-date">
+  	<time datetime="2021-03-15T04:20:49.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-03-15</time>
 </a>
         
       </header>
@@ -237,11 +237,10 @@
 <p>​    对输入(和URL参数)进行过滤，对输出进行编码。</p>
 <p>​    也就是对提交的所有内容进行过滤，对url中的参数进行过滤，过滤掉会导致脚本执行的相关内容；然后对动态输出到页面的内容进行html编码，使脚本无法在浏览器中执行。虽然对输入过滤可以被绕过，但是也还是会拦截很大一部分的XSS攻击。</p>
 <p>​    对输入和URL参数进行过滤(白名单和黑名单)</p>
-<p>​    主要的思路就是将容易导致XSS攻击的边角字符替换成全角字符。&lt; 和 &gt; 是脚本执行和各种html标签需要的，比如 <script>，& 和 # 以及 % 在对URL编码试图绕过XSS filter时，会出现。我们说对输入的过滤分为白名单和黑名单。上面的XSS filter就是一种黑名单的过滤，黑名单就是列出不能出现的对象的清单，一旦出现就进行处理。还有一种白名单的过滤，白名单就是列出可被接受的内容，比如规定所有的输入只能是“大小写的26个英文字母和10个数字，还有-和_”，所有其他的输入都是非法的，会被抛弃掉。很显然如此严格的白名单是可以100%拦截所有的XSS攻击的。但是现实情况一般是不能进行如此严格的白名单过滤的。</p>
+<p>​    主要的思路就是将容易导致XSS攻击的边角字符替换成全角字符。&lt; 和 &gt; 是脚本执行和各种html标签需要的，比如 script标签，&amp; 和 # 以及 % 在对URL编码试图绕过XSS filter时，会出现。我们说对输入的过滤分为白名单和黑名单。上面的XSS filter就是一种黑名单的过滤，黑名单就是列出不能出现的对象的清单，一旦出现就进行处理。还有一种白名单的过滤，白名单就是列出可被接受的内容，比如规定所有的输入只能是“大小写的26个英文字母和10个数字，还有-和_”，所有其他的输入都是非法的，会被抛弃掉。很显然如此严格的白名单是可以100%拦截所有的XSS攻击的。但是现实情况一般是不能进行如此严格的白名单过滤的。</p>
 <p>​    对于输入，处理使用XSS filter之外，对于每一个输入，在客户端和服务器端还要进行各种验证，验证是否合法字符，长度是否合法，格式是否正确。在客户端和服务端都要进行验证，因为客户端的验证很容易被绕过。其实这种验证也分为了黑名单和白名单。黑名单的验证就是不能出现某些字符，白名单的验证就是只能出现某些字符。尽量使用白名单。</p>
 <h2 id="什么叫反射shell，你能讲讲吗"><a href="#什么叫反射shell，你能讲讲吗" class="headerlink" title="什么叫反射shell，你能讲讲吗"></a>什么叫反射shell，你能讲讲吗</h2><p>reverse shell，就是控制端监听在某TCP/UDP端口，被控端发起请求到该端口，并将其命令行的输入输出转到控制端。reverse shell与telnet，ssh等标准shell对应，本质上是网络概念的客户端与服务端的角色反转。通常用于被控端因防火墙受限、权限不足、端口被占用等情形。</p>
-<h2 id="安全日志储存位置在哪"><a href="#安全日志储存位置在哪" class="headerlink" title="安全日志储存位置在哪"></a>安全日志储存位置在哪</h2><p>web日志分析：<strong><a target="_blank" rel="noopener" href="https://www.freebuf.com/sectool/202350.html">https://www.freebuf.com/sectool/202350.html</a></strong></p>
-<p>Windows日志存放于目录“C:\Windows\System32\winevt\Logs”中，在目录中可以找到“System”、“Setup”、“Application”、“Security”，分别对应系统日志、安装日志、应用程序日志和安全日志。</p>
+<h2 id="安全日志储存位置在哪"><a href="#安全日志储存位置在哪" class="headerlink" title="安全日志储存位置在哪"></a>安全日志储存位置在哪</h2><p>web日志分析：<strong><a target="_blank" rel="noopener" href="https://www.freebuf.com/sectool/202350.html">https://www.freebuf.com/sectool/202350.html</a></strong><br>Windows日志存放于目录“C:\Windows\System32\winevt\Logs”中，在目录中可以找到“System”、“Setup”、“Application”、“Security”，分别对应系统日志、安装日志、应用程序日志和安全日志。</p>
 <p>Linux常见的日志文件详述如下</p>
 <p>/var/log/auth.log 系统的认证日志、登陆、授权</p>
 <p>/var/log/lastlog 登陆信息</p>
@@ -328,7 +327,7 @@
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//pan.baidu.com/share/qrcode?url=http://example.com/2021/02/13/%E9%9D%A2%E8%AF%95%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98/" alt="微信分享二维码">
+      <img src="//pan.baidu.com/share/qrcode?url=http://example.com/2021/03/15/%E9%9D%A2%E8%AF%95%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -342,17 +341,8 @@
   
 <nav id="article-nav">
   
-    <a href="/2021/02/13/sudo%E7%BC%93%E5%86%B2%E5%8C%BA%E6%BA%A2%E5%87%BA%E6%8F%90%E6%9D%83(CVE-2021-3156)/" id="article-nav-newer" class="article-nav-link-wrap">
-      <i class="icon-circle-left"></i>
-      <div class="article-nav-title">
-        
-          sudo缓冲区溢出提权（CVE-2021-3156）
-        
-      </div>
-    </a>
   
-  
-    <a href="/2021/02/13/%E6%8A%A5%E5%91%8A%E6%A8%A1%E6%9D%BF/" id="article-nav-older" class="article-nav-link-wrap">
+    <a href="/2021/03/15/%E6%8A%A5%E5%91%8A%E6%A8%A1%E6%9D%BF/" id="article-nav-older" class="article-nav-link-wrap">
       <div class="article-nav-title">报告模板</div>
       <i class="icon-circle-right"></i>
     </a>
