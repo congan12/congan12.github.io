@@ -69,7 +69,7 @@
 <meta property="og:image" content="https://i.loli.net/2021/03/15/VXxTIKqBMmiZ1Ac.png">
 <meta property="og:image" content="https://i.loli.net/2021/03/15/5pIaVeQTEfGBwHN.png">
 <meta property="article:published_time" content="2021-03-15T03:13:15.000Z">
-<meta property="article:modified_time" content="2021-03-15T03:28:47.887Z">
+<meta property="article:modified_time" content="2021-03-15T05:42:36.471Z">
 <meta property="article:author" content="从安">
 <meta property="article:tag" content="内网渗透">
 <meta name="twitter:card" content="summary">
@@ -237,6 +237,8 @@
     <div class="article-entry" itemprop="articleBody">
       
         <h1 id="内网渗透环境搭建"><a href="#内网渗透环境搭建" class="headerlink" title="内网渗透环境搭建"></a>内网渗透环境搭建</h1><p>1、2003server 域靶机环境<br>    Iis6<br>2、2008server 域控<br>3、Windows7 域环境靶机<br>    phpstudy<br>4、Ubuntu 靶机<br>    安装软件<br>        apt update<br>        apt-get install -y vim ssh docker.io<br>    开机启动ssh<br>        Systemctl start ssh<br>        Systemctl enable ssh<br>    编辑 /lib/system/system/docker.service<br>        ExecStart=/usr/bin/dockerd -H tcp://0.0.0.0:2375 -H unix:///var/run/docker.sock</p>
+<a id="more"></a>
+
 <h1 id="模拟渗透"><a href="#模拟渗透" class="headerlink" title="模拟渗透"></a>模拟渗透</h1><h3 id="测试2003获取系统权限"><a href="#测试2003获取系统权限" class="headerlink" title="测试2003获取系统权限"></a>测试2003获取系统权限</h3><h2 id="利用iis-put上传漏洞进行getshell"><a href="#利用iis-put上传漏洞进行getshell" class="headerlink" title="利用iis put上传漏洞进行getshell"></a>利用iis put上传漏洞进行getshell</h2><p>通过抓包iis6数据包修改数据包头查看WEB服务器支持哪些请求方式<br><img src="https://i.loli.net/2021/03/15/mR3eY1s48zrXMPN.png" alt="nw1.png"></p>
 <p>修改GET为OPTIONS查看支持的请求方式<br><img src="https://i.loli.net/2021/03/15/hQbNWoZfPHrGa8j.png" alt="nw2.png"></p>
 <p>发现支持PUT的请求方式，利用PUT请求上传asp小马<br><img src="https://i.loli.net/2021/03/15/T9t2gzHm4rbMI7B.png" alt="nw3.png"></p>
